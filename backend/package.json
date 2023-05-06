@@ -3,10 +3,11 @@
     "start": "node dist/app.js",
     "dev": "nodemon src/app.ts",
     "build": "tsc -p .",
-    "test": "vitest",
-    "coverage": "vitest run --coverage"
+    "test": "npx prettier --write . && vitest",
+    "coverage": "npx prettier --write . && vitest run --coverage"
   },
   "devDependencies": {
+    "@types/node": "^20.1.0",
     "nodemon": "^2.0.22",
     "prettier": "2.8.8",
     "ts-node": "^10.9.1",
