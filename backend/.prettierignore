@@ -4,5 +4,6 @@ tsconfig.json
 nodemon.json
 vitest.config.ts
 .prettierrc.json
+prisma
 dist
 coverage
