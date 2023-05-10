@@ -1,7 +1,7 @@
 import { Client } from '../../entities/Client'
 import { hash } from 'bcrypt'
 
-export const CreateClient = async (
+export const UpsertClient = async (
   client: Client
 ): Promise<Client | { error: boolean; message: string } | any> => {
   const { email, name, password } = client

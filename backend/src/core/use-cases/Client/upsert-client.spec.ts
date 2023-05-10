@@ -1,9 +1,9 @@
 import { describe, it, expect } from 'vitest'
-import { CreateClient } from './create-client'
+import { UpsertClient } from './upsert-client'
 
 describe('create-client', () => {
   it('should create a client', async () => {
-    const client = await CreateClient({
+    const client = await UpsertClient({
       email: 'client@gmail.com',
       name: 'Client',
       password: '12345678'
@@ -20,7 +20,7 @@ describe('create-client', () => {
   })
 
   it('should not create client because the password is too short', async () => {
-    const client = await CreateClient({
+    const client = await UpsertClient({
       email: 'client@gmail.com',
       name: 'Client',
       password: '123'
@@ -32,7 +32,7 @@ describe('create-client', () => {
   })
 
   it('should not create client because the password includes the client name', async () => {
-    const client = await CreateClient({
+    const client = await UpsertClient({
       email: 'client@gmail.com',
       name: 'Client',
       password: 'Client123'

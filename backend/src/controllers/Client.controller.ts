@@ -2,14 +2,15 @@ import { Request, Response } from 'express'
 import { compare } from 'bcrypt'
 import { sign } from 'jsonwebtoken'
 import { PrismaClient, Prisma } from '@prisma/client'
-import { CreateClient } from '../core/use-cases/Client/create-client'
+import { UpsertClient } from '../core/use-cases/Client/upsert-client'
+import { removeObjectAttributes } from '../utils/common'
 
 const prisma = new PrismaClient()
 
 export const ClientSignup = async (req: Request, res: Response) => {
   const { name, email, password } = req.body
 
-  const client = await CreateClient({ name, email, password })
+  const client = await UpsertClient({ name, email, password })
 
   if (client.error) {
     return res.status(400).send(client)
@@ -21,7 +22,9 @@ export const ClientSignup = async (req: Request, res: Response) => {
         data: client
       })
 
-      return res.status(201).send(createdClient)
+      const createdClientWithoutPassword = removeObjectAttributes(createdClient, ['password'])
+
+      return res.status(201).send(createdClientWithoutPassword)
     } catch (error) {
       if (error instanceof Prisma.PrismaClientKnownRequestError) {
         if (error.code === 'P2002') {
@@ -34,6 +37,36 @@ export const ClientSignup = async (req: Request, res: Response) => {
   }
 
   create().finally(async () => await prisma.$disconnect())
+}
+
+export const ClientUpdate = async (req: Request, res: Response) => {
+  const { id } = req.params
+  const { name, email, password } = req.body
+
+  const client = await UpsertClient({ name, email, password })
+
+  if (client.error) {
+    return res.status(400).send(client)
+  }
+
+  const update = async () => {
+    try {
+      const updatedClient = await prisma.client.update({
+        where: {
+          id: +id
+        },
+        data: client
+      })
+
+      const updatedClientWithoutPassword = removeObjectAttributes(updatedClient, ['password'])
+
+      return res.status(200).send(updatedClientWithoutPassword)
+    } catch (error) {
+      throw error
+    }
+  }
+
+  update().finally(() => prisma.$disconnect())
 }
 
 export const ClientSignin = (req: Request, res: Response) => {
