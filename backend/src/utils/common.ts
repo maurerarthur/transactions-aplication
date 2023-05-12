@@ -1,4 +1,4 @@
-export const removeObjectAttributes = (obj: object, attributes: string[]): object => {
+export const removeObjectAttributes = (obj: object | any, attributes: string[]): object => {
   const clonedObj: any = {
     ...obj
   }

@@ -18,11 +18,12 @@ model Client {
 }
 
 model Transaction {
-  id Int @id @default(autoincrement())
+  id String @id @default(uuid())
   amount Float
 	type String
+  dueDateTime String
+  client Client @relation(fields: [clientId], references: [id])
   clientId Int
-  createdBy Client @relation(fields: [clientId], references: [id])
 	createdAt DateTime @default(now())
 	updatedAt DateTime @updatedAt
 }

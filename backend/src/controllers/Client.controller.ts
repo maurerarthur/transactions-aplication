@@ -39,36 +39,6 @@ export const ClientSignup = async (req: Request, res: Response) => {
   create().finally(async () => await prisma.$disconnect())
 }
 
-export const ClientUpdate = async (req: Request, res: Response) => {
-  const { id } = req.params
-  const { name, email, password } = req.body
-
-  const client = await UpsertClient({ name, email, password })
-
-  if (client.error) {
-    return res.status(400).send(client)
-  }
-
-  const update = async () => {
-    try {
-      const updatedClient = await prisma.client.update({
-        where: {
-          id: +id
-        },
-        data: client
-      })
-
-      const updatedClientWithoutPassword = removeObjectAttributes(updatedClient, ['password'])
-
-      return res.status(200).send(updatedClientWithoutPassword)
-    } catch (error) {
-      throw error
-    }
-  }
-
-  update().finally(() => prisma.$disconnect())
-}
-
 export const ClientSignin = (req: Request, res: Response) => {
   const { email, password } = req.body
 
@@ -114,4 +84,82 @@ export const ClientSignin = (req: Request, res: Response) => {
   }
 
   find().finally(async () => await prisma.$disconnect())
+}
+
+export const ClientView = (req: Request, res: Response) => {
+  const { id } = req.params
+
+  const view = async () => {
+    try {
+      const client = await prisma.client.findUnique({
+        where: {
+          id: +id
+        }
+      })
+
+      const clientWithoutPassword = removeObjectAttributes(client, ['password'])
+
+      return res.status(200).send(clientWithoutPassword)
+    } catch (error) {
+      throw error
+    }
+  }
+
+  view().finally(async () => await prisma.$disconnect())
+}
+
+export const ClientUpdate = async (req: Request, res: Response) => {
+  const { id } = req.params
+  const { name, email, password } = req.body
+
+  const client = await UpsertClient({ name, email, password })
+
+  if (client.error) {
+    return res.status(400).send(client)
+  }
+
+  const update = async () => {
+    try {
+      const updatedClient = await prisma.client.update({
+        where: {
+          id: +id
+        },
+        data: client
+      })
+
+      const updatedClientWithoutPassword = removeObjectAttributes(updatedClient, ['password'])
+
+      return res.status(200).send(updatedClientWithoutPassword)
+    } catch (error) {
+      throw error
+    }
+  }
+
+  update().finally(async () => await prisma.$disconnect())
+}
+
+export const ClientDelete = async (req: Request, res: Response) => {
+  const { id } = req.params
+
+  const deleteClient = async () => {
+    try {
+      const deletedClient = await prisma.client.delete({
+        where: {
+          id: +id
+        }
+      })
+
+      return res.status(200).send({ error: false, message: `Client with ID ${id} deleted.` })
+    } catch (error) {
+      if (error instanceof Prisma.PrismaClientKnownRequestError) {
+        if (error.code === 'P2025') {
+          return res.status(404).send({ error: true, message: 'Client not found.' })
+        }
+
+        throw error
+      }
+    }
+  }
+
+  deleteClient().finally(async () => await prisma.$disconnect())
 }
