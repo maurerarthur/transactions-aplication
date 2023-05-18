@@ -1,3 +1,4 @@
+import moment from 'moment'
 import { Transaction } from '../../entities/Transaction'
 
 export const UpsertTransaction = (
@@ -17,7 +18,14 @@ export const UpsertTransaction = (
   if (!type || !validTransactionTypes.includes(type)) {
     return {
       error: true,
-      message: 'The type of the transaction should be sent or received'
+      message: 'The type of the transaction should be sent or received.'
+    }
+  }
+
+  if (!moment(dueDateTime, 'YYYY-MM-DD', true).isValid()) {
+    return {
+      error: true,
+      message: 'The due date time should be in year-month-day (yyyy-mm-dd) format.'
     }
   }
 

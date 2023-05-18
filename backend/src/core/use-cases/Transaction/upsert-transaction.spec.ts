@@ -6,13 +6,15 @@ describe('create-transaction', () => {
     const transaction = UpsertTransaction({
       amount: 10,
       type: 'sent',
-      clientId: 1
+      clientId: 1,
+      dueDateTime: '2025-01-30'
     })
 
     expect(transaction).toEqual({
       amount: 10,
       type: 'sent',
-      clientId: 1
+      clientId: 1,
+      dueDateTime: '2025-01-30T00:00:00.000Z'
     })
   })
 
@@ -20,7 +22,8 @@ describe('create-transaction', () => {
     const transaction = UpsertTransaction({
       amount: -10,
       type: 'sent',
-      clientId: 1
+      clientId: 1,
+      dueDateTime: '2025-01-30'
     })
 
     expect(transaction).toContain({
@@ -32,7 +35,8 @@ describe('create-transaction', () => {
     const transaction = UpsertTransaction({
       amount: 0,
       type: 'sent',
-      clientId: 1
+      clientId: 1,
+      dueDateTime: '2025-01-30'
     })
 
     expect(transaction).toContain({
@@ -42,10 +46,24 @@ describe('create-transaction', () => {
 
   it('should not allow to create transaction with type different than sent or received', () => {
     const transaction = UpsertTransaction({
-      amount: 0,
       //@ts-ignore
       type: '',
-      clientId: 1
+      amount: 0,
+      clientId: 1,
+      dueDateTime: '2025-01-30'
+    })
+
+    expect(transaction).toContain({
+      error: true
+    })
+  })
+
+  it('should not allow to create transaction with wrong dueDateTime format', () => {
+    const transaction = UpsertTransaction({
+      amount: 0,
+      type: 'sent',
+      clientId: 1,
+      dueDateTime: '2025-01'
     })
 
     expect(transaction).toContain({
