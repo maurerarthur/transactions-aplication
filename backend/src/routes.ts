@@ -1,6 +1,7 @@
 require('dotenv').config()
 
 import express from 'express'
+import cors from 'cors'
 
 import { Auth } from './middlewares/Auth'
 
@@ -12,9 +13,14 @@ import {
   ClientDelete
 } from './core/use-cases/Client/Client.controller'
 
-import { CreateTransaction } from './core/use-cases/Transaction/Transaction.controller'
+import {
+  TransactionCreate,
+  TransactionDelete
+} from './core/use-cases/Transaction/Transaction.controller'
 
 const routes = express.Router()
+
+routes.use(cors())
 
 routes.post('/signup', ClientSignup)
 routes.post('/signin', ClientSignin)
@@ -25,6 +31,7 @@ routes.get('/client/:id', ClientView)
 routes.put('/client/:id', ClientUpdate)
 routes.delete('/client/:id', ClientDelete)
 
-routes.post('/transaction/new', CreateTransaction)
+routes.post('/transaction/new', TransactionCreate)
+routes.delete('/transaction/:id', TransactionDelete)
 
 export default routes
