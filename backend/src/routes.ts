@@ -15,6 +15,7 @@ import {
 
 import {
   TransactionCreate,
+  TransactionUpdate,
   TransactionDelete
 } from './core/use-cases/Transaction/Transaction.controller'
 
@@ -32,6 +33,7 @@ routes.put('/client/:id', ClientUpdate)
 routes.delete('/client/:id', ClientDelete)
 
 routes.post('/transaction/new', TransactionCreate)
+routes.put('/transaction/:id', TransactionUpdate)
 routes.delete('/transaction/:id', TransactionDelete)
 
 export default routes

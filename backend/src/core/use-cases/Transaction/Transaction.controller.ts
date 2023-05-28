@@ -38,6 +38,35 @@ export const TransactionCreate = (req: Request, res: Response) => {
   create().finally(async () => await prisma.$disconnect())
 }
 
+export const TransactionUpdate = async (req: Request, res: Response) => {
+  const { id } = req.params
+
+  const { amount, type, clientId, dueDateTime } = req.body
+
+  const transaction = UpsertTransaction({ amount, type, clientId, dueDateTime })
+
+  if (transaction.error) {
+    return res.status(400).send(transaction)
+  }
+
+  const update = async () => {
+    try {
+      const updatedTransaction = await prisma.transaction.update({
+        where: {
+          id: id
+        },
+        data: transaction
+      })
+
+      return res.status(200).send(updatedTransaction)
+    } catch (error) {
+      throw error
+    }
+  }
+
+  update().finally(async () => await prisma.$disconnect())
+}
+
 export const TransactionDelete = async (req: Request, res: Response) => {
   const { id } = req.params
 
