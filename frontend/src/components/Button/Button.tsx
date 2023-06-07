@@ -2,14 +2,14 @@ import { TailSpin } from 'react-loader-spinner'
 
 interface ButtonProps {
   id: string
-  title: string
+  title: string | React.ReactElement
   isLoading?: boolean
 }
 
 const Button: React.FC<ButtonProps> = props => {
   return(
     <button
-      className="flex justify-center w-full p-1 font-bold text-white bg-slate-950 rounded-lg enabled:hover:bg-white enabled:hover:text-slate-950 border-2 border-slate-950"
+      className="flex justify-center w-full p-1 font-bold text-white bg-slate-950 rounded-lg transition duration-500 ease-in-out enabled:hover:bg-white enabled:hover:text-slate-950 border-2 border-slate-950"
       id={props.id}
       disabled={props.isLoading}
     >

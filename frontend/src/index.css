@@ -3,7 +3,7 @@
 @tailwind utilities;
 
 * {
-  font-family: 'Ubuntu', sans-serif;
+  font-family: 'Barlow Condensed', sans-serif;
 }
 
 html, body, #root {
