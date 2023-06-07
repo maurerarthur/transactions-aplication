@@ -10,3 +10,9 @@ html, body, #root {
   width: 100% !important;
   height: 100% !important;
 }
+
+@layer components {
+  .default-bg {
+    @apply bg-gradient-to-r from-fuchsia-500 to-cyan-500
+  }
+}

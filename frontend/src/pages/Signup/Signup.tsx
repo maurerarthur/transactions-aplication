@@ -5,10 +5,10 @@ import Button from '../../components/Button'
 
 const Signup: React.FC = () => {
   return(
-    <div className="w-screen h-screen flex justify-center items-center bg-gradient-to-r from-fuchsia-500 to-cyan-500">
-      <div className="w-3/4 md:w-1/4 h-fit bg-neutral-50 border-none rounded-xl p-10">
-        <h1 className="text-slate-950 text-5xl font-bold">Create Account</h1>
-        <p className="text-gray-600 text-lg">Please enter your details</p>
+    <div className='w-screen min-h-screen p-2 overflow-y-scroll flex justify-center items-center default-bg'>
+      <div className='w-3/4 md:w-1/4 h-fit bg-neutral-50 border-none rounded-xl p-10'>
+        <h1 className='text-slate-950 text-5xl font-bold'>Create Account</h1>
+        <p className='text-gray-600 text-lg'>Please enter your details</p>
         <div className='flex flex-col mt-5'>
           <div>
             <Input
