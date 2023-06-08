@@ -6,6 +6,7 @@ interface InputProps {
   placeholder?: string
   label?: string
   type: HTMLInputTypeAttribute
+  value?: any
   error?: boolean
   helperText?: string
   onChange: (event: React.ChangeEvent<HTMLInputElement>) => void
@@ -25,6 +26,7 @@ const Input: React.FC<InputProps> = props => {
         name={props.name}
         placeholder={props.placeholder}
         type={props.type}
+        value={props.value}
         onChange={props.onChange}
       />
       {props.error && (

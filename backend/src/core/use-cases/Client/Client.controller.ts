@@ -51,7 +51,7 @@ export const ClientSignin = (req: Request, res: Response) => {
       })
 
       if (!client) {
-        return res.status(204).send({
+        return res.status(404).send({
           error: true,
           message: 'Client not found.'
         })
