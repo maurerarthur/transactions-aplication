@@ -12,6 +12,8 @@ import { useLoginStore } from './store'
 import { setApiHeaderToken } from '../../../services/api'
 import { requestSignin } from './services'
 
+import { SIGNUP } from '../../router/routes'
+
 import { version } from '../../../package.json'
 
 export interface signin {
@@ -27,7 +29,7 @@ const Login: React.FC = () => {
     password: ''
   })
 
-  const { isLoading, mutate } = useMutation(requestSignin, {
+  const signin = useMutation(requestSignin, {
     onSuccess: data => {
       setApiHeaderToken(data?.token)
       setLogin(data)
@@ -40,7 +42,7 @@ const Login: React.FC = () => {
 
   const submit = (event: FormEvent, data: signin) => {
     event.preventDefault()
-    mutate(data)
+    signin.mutate(data)
   }
 
   return(
@@ -76,12 +78,12 @@ const Login: React.FC = () => {
             <Button
               id='login-submit'
               type='submit'
-              isLoading={isLoading}
+              isLoading={signin.isLoading}
               title={<p className='text-lg'>Sign in</p>}
             />
           </div>
           <div className='flex justify-center mt-5'>
-            <Link to='/signup'>Create Account</Link>
+            <Link to={SIGNUP}>Create Account</Link>
           </div>
         </form>
       </div>

@@ -42,4 +42,16 @@ describe('create-client', () => {
       error: true
     })
   })
+
+  it('should not create client because the email is in the wrong format', async () => {
+    const client = await UpsertClient({
+      email: 'client',
+      name: 'Client',
+      password: '123456789'
+    })
+
+    expect(client).toContain({
+      error: true
+    })
+  })
 })

@@ -4,8 +4,14 @@ import ErrorFallback from '../pages/ErrorFallback'
 import Login from '../pages/Login'
 import Signup from '../pages/Signup'
 
+import {
+  ROOT,
+  SIGNIN,
+  SIGNUP
+} from './routes'
+
 export const router = createBrowserRouter([
-  { path: '/', element: <Login />, errorElement: <ErrorFallback /> },
-  { path: '/signin', element: <Login />, errorElement: <ErrorFallback /> },
-  { path: '/signup', element: <Signup />, errorElement: <ErrorFallback /> }
+  { path: ROOT, element: <Login />, errorElement: <ErrorFallback /> },
+  { path: SIGNIN, element: <Login />, errorElement: <ErrorFallback /> },
+  { path: SIGNUP, element: <Signup />, errorElement: <ErrorFallback /> }
 ])

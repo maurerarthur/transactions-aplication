@@ -1,5 +1,6 @@
 import { Client } from '../../entities/Client'
 import { hash } from 'bcrypt'
+import { validateEmail } from '../../../utils/validations'
 
 export const UpsertClient = async (
   client: Client
@@ -17,6 +18,13 @@ export const UpsertClient = async (
     return {
       error: true,
       message: 'Your name cannot be a part of the password.'
+    }
+  }
+
+  if (!validateEmail(email)) {
+    return {
+      error: true,
+      message: 'The email format is wrong.'
     }
   }
 

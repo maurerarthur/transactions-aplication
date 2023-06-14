@@ -1,22 +1,64 @@
-import { Link } from 'react-router-dom'
+import { useState, FormEvent } from 'react'
+
+import { AxiosError } from 'axios'
+import { useMutation } from '@tanstack/react-query'
+import { Link, useNavigate } from 'react-router-dom'
+import { toast } from 'react-toastify'
 
 import Input from '../../components/Input'
 import Button from '../../components/Button'
 
+import { requestSignup } from './services'
+
+import { SIGNIN } from '../../router/routes'
+
+export interface signup {
+  name: string
+  email: string
+  password: string
+}
+
 const Signup: React.FC = () => {
+  const navigate = useNavigate()
+
+  const [signupForm, setSignupForm] = useState<signup>({
+    name: '',
+    email: '',
+    password: ''
+  })
+
+  const signup = useMutation(requestSignup, {
+    onSuccess: () => {
+      toast.success('Account successfully created! Please signin.')
+      return navigate(SIGNIN)
+    },
+    onError: (error: AxiosError<any>) => {
+      const { message } = error.response?.data
+      return toast.error(message)
+    }
+  })
+
+  const submit = (event: FormEvent, data: signup) => {
+    event.preventDefault()
+    signup.mutate(data)
+  }
+
   return(
     <div className='w-screen min-h-screen p-2 overflow-y-scroll flex justify-center items-center default-bg'>
       <div className='w-3/4 md:w-1/4 h-fit bg-neutral-50 border-none rounded-xl p-10'>
         <h1 className='text-slate-950 text-5xl font-bold'>Create Account</h1>
         <p className='text-gray-600 text-lg'>Please enter your details</p>
-        <div className='flex flex-col mt-5'>
+        <form
+          onSubmit={event => submit(event, signupForm)}
+          className='flex flex-col mt-5'
+        >
           <div>
             <Input
               id='signup-email'
               type='text'
               placeholder='Name'
               label='Enter your name'
-              onChange={event => console.log(event.target.value)}
+              onChange={event => setSignupForm({ ...signupForm, name: event.target.value })}
             />
           </div>
           <div className='mt-5'>
@@ -25,7 +67,7 @@ const Signup: React.FC = () => {
               type='text'
               placeholder='Email'
               label='Enter your email'
-              onChange={event => console.log(event.target.value)}
+              onChange={event => setSignupForm({ ...signupForm, email: event.target.value })}
             />
           </div>
           <div className='mt-5'>
@@ -34,19 +76,21 @@ const Signup: React.FC = () => {
               type='password'
               placeholder='Password'
               label='Enter your password'
-              onChange={event => console.log(event.target.value)}
+              onChange={event => setSignupForm({ ...signupForm, password: event.target.value })}
             />
           </div>
           <div className='mt-5'>
             <Button
               id='signup-submit'
+              type='submit'
+              isLoading={signup.isLoading}
               title={<p className='text-lg'>Sign up</p>}
             />
           </div>
           <div className='flex justify-center mt-5'>
-            <Link to='/signin'>Login</Link>
+            <Link to={SIGNIN}>Login</Link>
           </div>
-        </div>
+        </form>
       </div>
     </div>
   )
