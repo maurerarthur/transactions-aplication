@@ -7,3 +7,7 @@ export const api: AxiosInstance = Axios.create({
     'Content-Type': 'application/json'
   }
 })
+
+export const setApiHeaderToken = (token: string) => {
+  api.defaults.headers.common['Authorization'] = token
+}

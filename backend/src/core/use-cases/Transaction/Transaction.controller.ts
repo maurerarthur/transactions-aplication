@@ -97,7 +97,6 @@ export const TransactionDelete = async (req: Request, res: Response) => {
         message: `Transaction with ID ${id} deleted.`
       })
     } catch (error) {
-      console.log(error)
       if (error instanceof Prisma.PrismaClientKnownRequestError) {
         if (error.code === 'P2025') {
           return res.status(404).send({ error: true, message: 'Transaction not found.' })

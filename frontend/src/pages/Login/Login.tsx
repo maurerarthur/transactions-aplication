@@ -1,7 +1,6 @@
-import { FormEvent, useState } from 'react'
+import { useState, FormEvent } from 'react'
 
-import { api } from '../../../services/api'
-import { AxiosResponse, AxiosError } from 'axios'
+import { AxiosError } from 'axios'
 import { useMutation } from '@tanstack/react-query'
 import { Link } from 'react-router-dom'
 import { toast } from 'react-toastify'
@@ -9,28 +8,29 @@ import { toast } from 'react-toastify'
 import Input from '../../components/Input'
 import Button from '../../components/Button'
 
+import { useLoginStore } from './store'
+import { setApiHeaderToken } from '../../../services/api'
+import { requestSignin } from './services'
+
 import { version } from '../../../package.json'
 
-interface signin {
+export interface signin {
   email: string
   password: string
 }
 
 const Login: React.FC = () => {
+  const { setLogin } = useLoginStore()
+
   const [signinForm, setSigninForm] = useState<signin>({
     email: '',
     password: ''
   })
 
-  const signin = async (data: signin) => {
-    const response = await api.post('/signin', data)
-    return response.data
-  }
-
-  const { isLoading, mutate } = useMutation(signin, {
-    onSuccess: (data: AxiosResponse) => {
-      console.log(data)
-      return toast.success('Logged in!')
+  const { isLoading, mutate } = useMutation(requestSignin, {
+    onSuccess: data => {
+      setApiHeaderToken(data?.token)
+      setLogin(data)
     },
     onError: (error: AxiosError<any>) => {
       const { message } = error.response?.data
