@@ -14,7 +14,7 @@ interface InputProps {
 
 const Input: React.FC<InputProps> = props => {
   return(
-    <div className="flex flex-col">
+    <div className='flex flex-col'>
       {props.label && (
         <p className={`mb-1 text-md ${props.error ? 'text-red-500' : 'text-gray-600'}`}>
           {props.label}
@@ -30,7 +30,7 @@ const Input: React.FC<InputProps> = props => {
         onChange={props.onChange}
       />
       {props.error && (
-        <p className="text-red-500 mt-1">
+        <p className='text-red-500 mt-1'>
           {props.helperText}
         </p>
       )}

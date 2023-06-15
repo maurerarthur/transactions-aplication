@@ -1,4 +1,4 @@
-import { useState, FormEvent } from 'react'
+import { useState, useEffect, FormEvent } from 'react'
 
 import { AxiosError } from 'axios'
 import { useMutation } from '@tanstack/react-query'
@@ -9,8 +9,9 @@ import Input from '../../components/Input'
 import Button from '../../components/Button'
 
 import { requestSignup } from './services'
+import { useLoginStore } from '../Login/store'
 
-import { SIGNIN } from '../../router/routes'
+import { DASHBOARD, SIGNIN } from '../../router/routes'
 
 export interface signup {
   name: string
@@ -21,11 +22,19 @@ export interface signup {
 const Signup: React.FC = () => {
   const navigate = useNavigate()
 
+  const { token } = useLoginStore()
+
   const [signupForm, setSignupForm] = useState<signup>({
     name: '',
     email: '',
     password: ''
   })
+
+  useEffect(() => {
+    if(token) {
+      navigate(DASHBOARD)
+    }
+  }, [token])
 
   const signup = useMutation(requestSignup, {
     onSuccess: () => {

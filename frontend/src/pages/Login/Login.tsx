@@ -1,8 +1,8 @@
-import { useState, FormEvent } from 'react'
+import { useState, useEffect, FormEvent } from 'react'
 
 import { AxiosError } from 'axios'
 import { useMutation } from '@tanstack/react-query'
-import { Link } from 'react-router-dom'
+import { useNavigate, Link } from 'react-router-dom'
 import { toast } from 'react-toastify'
 
 import Input from '../../components/Input'
@@ -12,7 +12,7 @@ import { useLoginStore } from './store'
 import { setApiHeaderToken } from '../../../services/api'
 import { requestSignin } from './services'
 
-import { SIGNUP } from '../../router/routes'
+import { DASHBOARD, SIGNUP } from '../../router/routes'
 
 import { version } from '../../../package.json'
 
@@ -22,17 +22,26 @@ export interface signin {
 }
 
 const Login: React.FC = () => {
-  const { setLogin } = useLoginStore()
+  const navigate = useNavigate()
+
+  const { setLogin, token } = useLoginStore()
 
   const [signinForm, setSigninForm] = useState<signin>({
     email: '',
     password: ''
   })
 
+  useEffect(() => {
+    if(token) {
+      navigate(DASHBOARD)
+    }
+  }, [token])
+
   const signin = useMutation(requestSignin, {
     onSuccess: data => {
       setApiHeaderToken(data?.token)
       setLogin(data)
+      return navigate(DASHBOARD)
     },
     onError: (error: AxiosError<any>) => {
       const { message } = error.response?.data
