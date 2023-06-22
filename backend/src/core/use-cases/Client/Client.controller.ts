@@ -87,13 +87,13 @@ export const ClientSignin = (req: Request, res: Response) => {
 }
 
 export const ClientView = (req: Request, res: Response) => {
-  const { id } = req.params
+  const { clientId } = req.params
 
   const view = async () => {
     try {
       const client = await prisma.client.findUnique({
         where: {
-          id: +id
+          id: clientId
         }
       })
 
@@ -109,7 +109,7 @@ export const ClientView = (req: Request, res: Response) => {
 }
 
 export const ClientUpdate = async (req: Request, res: Response) => {
-  const { id } = req.params
+  const { clientId } = req.params
   const { name, email, password } = req.body
 
   const client = await UpsertClient({ name, email, password })
@@ -122,7 +122,7 @@ export const ClientUpdate = async (req: Request, res: Response) => {
     try {
       const updatedClient = await prisma.client.update({
         where: {
-          id: +id
+          id: clientId
         },
         data: client
       })
@@ -139,17 +139,17 @@ export const ClientUpdate = async (req: Request, res: Response) => {
 }
 
 export const ClientDelete = async (req: Request, res: Response) => {
-  const { id } = req.params
+  const { clientId } = req.params
 
   const deleteClient = async () => {
     try {
       await prisma.client.delete({
         where: {
-          id: +id
+          id: clientId
         }
       })
 
-      return res.status(200).send({ error: false, message: `Client with ID ${id} deleted.` })
+      return res.status(200).send({ error: false, message: `Client with ID ${clientId} deleted.` })
     } catch (error) {
       if (error instanceof Prisma.PrismaClientKnownRequestError) {
         if (error.code === 'P2025') {

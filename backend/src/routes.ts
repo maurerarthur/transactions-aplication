@@ -26,14 +26,12 @@ routes.use(cors())
 routes.post('/signup', ClientSignup)
 routes.post('/signin', ClientSignin)
 
-routes.use(Auth)
+routes.get('/client/:clientId', Auth, ClientView)
+routes.put('/client/:clientId', Auth, ClientUpdate)
+routes.delete('/client/:clientId', Auth, ClientDelete)
 
-routes.get('/client/:id', ClientView)
-routes.put('/client/:id', ClientUpdate)
-routes.delete('/client/:id', ClientDelete)
-
-routes.post('/transaction/new', TransactionCreate)
-routes.put('/transaction/:id', TransactionUpdate)
-routes.delete('/transaction/:id', TransactionDelete)
+routes.post('/client/:clientId/transaction', Auth, TransactionCreate)
+routes.put('/client/:clientId/transaction/:id', Auth, TransactionUpdate)
+routes.delete('/client/:clientId/transaction/:id', Auth, TransactionDelete)
 
 export default routes

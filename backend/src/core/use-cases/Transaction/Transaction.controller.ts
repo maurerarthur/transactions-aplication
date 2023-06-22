@@ -6,7 +6,8 @@ import { DeleteTransaction } from './delete-transaction'
 const prisma = new PrismaClient()
 
 export const TransactionCreate = (req: Request, res: Response) => {
-  const { amount, type, clientId, dueDateTime } = req.body
+  const { clientId } = req.params
+  const { amount, type, dueDateTime } = req.body
 
   const transaction = UpsertTransaction({ amount, type, clientId, dueDateTime })
 
@@ -39,9 +40,8 @@ export const TransactionCreate = (req: Request, res: Response) => {
 }
 
 export const TransactionUpdate = async (req: Request, res: Response) => {
-  const { id } = req.params
-
-  const { amount, type, clientId, dueDateTime } = req.body
+  const { id, clientId } = req.params
+  const { amount, type, dueDateTime } = req.body
 
   const transaction = UpsertTransaction({ amount, type, clientId, dueDateTime })
 

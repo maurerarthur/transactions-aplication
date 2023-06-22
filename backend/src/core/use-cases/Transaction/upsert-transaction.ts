@@ -31,8 +31,8 @@ export const UpsertTransaction = (
 
   return {
     amount: +amount,
-    clientId: +clientId,
     dueDateTime: new Date(dueDateTime).toISOString(),
+    clientId,
     type
   }
 }

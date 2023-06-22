@@ -3,6 +3,7 @@ import { verify } from 'jsonwebtoken'
 
 export const Auth = async (req: Request, res: Response, next: NextFunction) => {
   const token = req.headers.authorization
+  const { clientId } = req.params
 
   if (!token) {
     return res.status(401).send({
@@ -12,7 +13,14 @@ export const Auth = async (req: Request, res: Response, next: NextFunction) => {
   }
 
   try {
-    const decoded = verify(token, process.env.JWT_SECRET!.toString())
+    const decoded: any = verify(token, process.env.JWT_SECRET!.toString())
+
+    if (clientId !== decoded.id) {
+      return res.status(401).send({
+        error: true,
+        message: 'Error on authentication.'
+      })
+    }
 
     if (decoded) {
       return next()
