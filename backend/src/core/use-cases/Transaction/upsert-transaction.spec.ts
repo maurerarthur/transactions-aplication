@@ -6,14 +6,14 @@ describe('create-transaction', () => {
     const transaction = UpsertTransaction({
       amount: 10,
       type: 'sent',
-      clientId: 1,
+      clientId: '1',
       dueDateTime: '2025-01-30'
     })
 
     expect(transaction).toEqual({
       amount: 10,
       type: 'sent',
-      clientId: 1,
+      clientId: '1',
       dueDateTime: '2025-01-30T00:00:00.000Z'
     })
   })
@@ -22,7 +22,7 @@ describe('create-transaction', () => {
     const transaction = UpsertTransaction({
       amount: -10,
       type: 'sent',
-      clientId: 1,
+      clientId: '1',
       dueDateTime: '2025-01-30'
     })
 
@@ -35,7 +35,7 @@ describe('create-transaction', () => {
     const transaction = UpsertTransaction({
       amount: 0,
       type: 'sent',
-      clientId: 1,
+      clientId: '1',
       dueDateTime: '2025-01-30'
     })
 
@@ -49,7 +49,7 @@ describe('create-transaction', () => {
       //@ts-ignore
       type: '',
       amount: 0,
-      clientId: 1,
+      clientId: '1',
       dueDateTime: '2025-01-30'
     })
 
@@ -62,7 +62,7 @@ describe('create-transaction', () => {
     const transaction = UpsertTransaction({
       amount: 0,
       type: 'sent',
-      clientId: 1,
+      clientId: '1',
       dueDateTime: '2025-01'
     })
 

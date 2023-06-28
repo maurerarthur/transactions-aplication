@@ -2,8 +2,8 @@ import { Request, Response } from 'express'
 import { compare } from 'bcrypt'
 import { sign } from 'jsonwebtoken'
 import { PrismaClient, Prisma } from '@prisma/client'
-import { UpsertClient } from './upsert-client'
-import { removeObjectAttributes } from '../../../utils/common'
+import { UpsertClient } from '../use-cases/Client/upsert-client'
+import { removeObjectAttributes } from '../../utils/common'
 
 const prisma = new PrismaClient()
 

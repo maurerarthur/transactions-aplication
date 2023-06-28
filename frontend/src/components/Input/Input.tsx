@@ -4,7 +4,7 @@ interface InputProps {
   id: string
   name?: string
   placeholder?: string
-  label?: string
+  label?: string | React.ReactElement
   type: HTMLInputTypeAttribute
   value?: any
   error?: boolean

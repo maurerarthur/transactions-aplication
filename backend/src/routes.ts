@@ -11,13 +11,13 @@ import {
   ClientUpdate,
   ClientView,
   ClientDelete
-} from './core/use-cases/Client/Client.controller'
+} from './core/controllers/Client.controller'
 
 import {
   TransactionCreate,
   TransactionUpdate,
   TransactionDelete
-} from './core/use-cases/Transaction/Transaction.controller'
+} from './core/controllers/Transaction.controller'
 
 const routes = express.Router()
 

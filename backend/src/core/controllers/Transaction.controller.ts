@@ -1,7 +1,7 @@
 import { Request, Response } from 'express'
 import { PrismaClient, Prisma } from '@prisma/client'
-import { UpsertTransaction } from './upsert-transaction'
-import { DeleteTransaction } from './delete-transaction'
+import { UpsertTransaction } from '../use-cases/Transaction/upsert-transaction'
+import { DeleteTransaction } from '../use-cases/Transaction/delete-transaction'
 
 const prisma = new PrismaClient()
 
