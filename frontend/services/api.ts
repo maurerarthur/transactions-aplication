@@ -10,7 +10,7 @@ export const api: AxiosInstance = Axios.create({
 })
 
 api.interceptors.response.use(
-  (res) => res.data,
+  (res) => res,
   (error: AxiosError<any>) => {
     if(error.response?.status == 401) {
       toast.error(error.response?.data?.message)

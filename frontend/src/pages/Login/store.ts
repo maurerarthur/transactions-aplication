@@ -2,7 +2,7 @@ import { create } from 'zustand'
 import { persist, createJSONStorage } from 'zustand/middleware'
 
 interface Store {
-  id: number
+  id: string
   email: string
   name: string
   token: string
@@ -11,7 +11,7 @@ interface Store {
 }
 
 const initialState: Omit<Store, 'clear' | 'setLogin'> = {
-  id: 0,
+  id: '',
   email: '',
   name: '',
   token: ''

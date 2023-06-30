@@ -1,4 +1,5 @@
-import { HTMLInputTypeAttribute } from 'react'
+import { useState, HTMLInputTypeAttribute } from 'react'
+import { Eye, EyeOff } from 'lucide-react'
 
 interface InputProps {
   id: string
@@ -13,6 +14,19 @@ interface InputProps {
 }
 
 const Input: React.FC<InputProps> = props => {
+  const [isPasswordVisible, setIsPasswordVisible] = useState<boolean>(false)
+  const [type, setType] = useState<HTMLInputTypeAttribute>(props.type)
+
+  const handlePasswordVisibility = () => {
+    if(type === 'text') {
+      setIsPasswordVisible(false)
+      return setType('password')
+    }
+
+    setIsPasswordVisible(true)
+    setType('text')
+  }
+
   return(
     <div className='flex flex-col'>
       {props.label && (
@@ -20,15 +34,35 @@ const Input: React.FC<InputProps> = props => {
           {props.label}
         </p>
       )}
-      <input
-        className={`rounded-lg outline-none p-1 border-2 ${props.error ? 'border-red-500' : 'border-gray-500'}`}
-        id={props.id}
-        name={props.name}
-        placeholder={props.placeholder}
-        type={props.type}
-        value={props.value}
-        onChange={props.onChange}
-      />
+      <div className='w-full flex flex-row items-center'>
+        <input
+          className={`w-full rounded-lg outline-none p-1 border-2 ${props.error ? 'border-red-500' : 'border-gray-500'}`}
+          id={props.id}
+          name={props.name}
+          placeholder={props.placeholder}
+          type={type}
+          value={props.value}
+          onChange={props.onChange}
+        />
+        {(props.type == 'password' && !isPasswordVisible) && (
+          <button
+            type='button'
+            className='bg-white rounded-lg border-2 border-gray-500 p-1 ml-3'
+            onClick={handlePasswordVisibility}
+          >
+            <Eye className='text-slate-700' />
+          </button>
+        )}
+        {isPasswordVisible && (
+          <button
+            type='button'
+            className='bg-white rounded-lg border-2 border-gray-500 p-1 ml-3'
+            onClick={handlePasswordVisibility}
+          >
+            <EyeOff className='text-slate-700' />
+          </button>
+        )}
+      </div>
       {props.error && (
         <p className='text-red-500 mt-1'>
           {props.helperText}
