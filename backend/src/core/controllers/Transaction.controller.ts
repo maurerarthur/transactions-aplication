@@ -5,6 +5,46 @@ import { DeleteTransaction } from '../use-cases/Transaction/delete-transaction'
 
 const prisma = new PrismaClient()
 
+export const TransactionView = (req: Request, res: Response) => {
+  const { id } = req.params
+
+  const view = async () => {
+    try {
+      const transaction = await prisma.transaction.findUnique({
+        where: {
+          id
+        }
+      })
+
+      return res.status(200).send(transaction)
+    } catch (error) {
+      throw error
+    }
+  }
+
+  view().finally(async () => await prisma.$disconnect())
+}
+
+export const TransactionViewAll = (req: Request, res: Response) => {
+  const { clientId } = req.params
+
+  const view = async () => {
+    try {
+      const transactions = await prisma.transaction.findMany({
+        where: {
+          clientId
+        }
+      })
+
+      return res.status(200).send(transactions)
+    } catch (error) {
+      throw error
+    }
+  }
+
+  view().finally(async () => await prisma.$disconnect())
+}
+
 export const TransactionCreate = (req: Request, res: Response) => {
   const { clientId } = req.params
   const { amount, type, dueDateTime } = req.body

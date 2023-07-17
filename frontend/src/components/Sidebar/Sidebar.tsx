@@ -2,7 +2,11 @@ import { useNavigate } from 'react-router-dom'
 import { BarChart3, User, CircleDollarSign, LogOut } from 'lucide-react'
 import MenuButton from '../MenuButton'
 
-import { DASHBOARD, USER } from '../../router/routes'
+import {
+  DASHBOARD,
+  USER,
+  TRANSACTIONS
+} from '../../router/routes'
 
 const Sidebar: React.FC = () => {
   const navigate = useNavigate()
@@ -30,7 +34,7 @@ const Sidebar: React.FC = () => {
         id='menu-button-transactions'
         title='Transactions'
         icon={<CircleDollarSign />}
-        onClick={() => null}
+        onClick={() => navigate(TRANSACTIONS)}
       />
       <MenuButton
         id='menu-button-transactions'

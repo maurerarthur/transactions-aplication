@@ -6,13 +6,15 @@ import Login from '../pages/Login'
 import Signup from '../pages/Signup'
 import Dashboard from '../pages/Dashboard'
 import User from '../pages/User'
+import Transactions from '../pages/Transactions'
 
 import {
   ROOT,
   SIGNIN,
   SIGNUP,
   DASHBOARD,
-  USER
+  USER,
+  TRANSACTIONS
 } from './routes'
 
 export const router = createBrowserRouter([
@@ -33,6 +35,15 @@ export const router = createBrowserRouter([
     element: (
       <LayoutRoute>
         <User />
+      </LayoutRoute>
+    ),
+    errorElement: <ErrorFallback />
+  },
+  {
+    path: TRANSACTIONS,
+    element: (
+      <LayoutRoute>
+        <Transactions />
       </LayoutRoute>
     ),
     errorElement: <ErrorFallback />
