@@ -9,7 +9,6 @@ import Input from '../../components/Input'
 import Button from '../../components/Button'
 
 import { useLoginStore } from './store'
-import { setApiHeaderToken } from '../../../services/api'
 import { requestSignin } from './services'
 
 import { DASHBOARD, SIGNUP } from '../../router/routes'
@@ -39,7 +38,6 @@ const Login: React.FC = () => {
 
   const signin = useMutation(requestSignin, {
     onSuccess: data => {
-      setApiHeaderToken(data?.token)
       setLogin(data)
       return navigate(DASHBOARD)
     },

@@ -4,12 +4,12 @@ import { Transaction } from '../../entities/Transaction'
 export const DeleteTransaction = (
   transaction: Omit<Transaction, 'amount' | 'type' | 'clientId'>
 ): Transaction | { error: boolean; message: string } | any => {
-  const { dueDateTime } = transaction
+  const { dueDate } = transaction
 
-  if (moment(moment.now()).isBefore(dueDateTime)) {
+  if (moment(moment.now()).isBefore(dueDate)) {
     return {
       error: true,
-      message: 'The transaction cannot be deleted before due date time.'
+      message: 'The transaction cannot be deleted before due date.'
     }
   }
 

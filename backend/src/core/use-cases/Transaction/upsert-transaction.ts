@@ -4,7 +4,7 @@ import { Transaction } from '../../entities/Transaction'
 export const UpsertTransaction = (
   transaction: Transaction
 ): Transaction | { error: boolean; message: string } | any => {
-  const { amount, type, clientId, dueDateTime } = transaction
+  const { amount, type, clientId, dueDate } = transaction
 
   const validTransactionTypes = ['sent', 'received']
 
@@ -22,16 +22,16 @@ export const UpsertTransaction = (
     }
   }
 
-  if (!moment(dueDateTime, 'YYYY-MM-DD', true).isValid()) {
+  if (!moment(dueDate, 'YYYY-MM-DD', true).isValid()) {
     return {
       error: true,
-      message: 'The due date time should be in year-month-day (yyyy-mm-dd) format.'
+      message: 'The due date should be in year-month-day (yyyy-mm-dd) format.'
     }
   }
 
   return {
     amount: +amount,
-    dueDateTime: new Date(dueDateTime).toISOString(),
+    dueDate: moment(dueDate).format('YYYY-MM-DD'),
     clientId,
     type
   }

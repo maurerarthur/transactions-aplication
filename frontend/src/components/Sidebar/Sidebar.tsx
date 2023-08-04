@@ -1,4 +1,7 @@
+import { useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { useLoginStore } from '../../pages/Login/store'
+import { setApiHeaderToken } from '../../../services/api'
 import { BarChart3, User, CircleDollarSign, LogOut } from 'lucide-react'
 import MenuButton from '../MenuButton'
 
@@ -10,6 +13,12 @@ import {
 
 const Sidebar: React.FC = () => {
   const navigate = useNavigate()
+
+  const { token } = useLoginStore()
+
+  useEffect(() => {
+    setApiHeaderToken(token)
+  }, [token])
 
   const handleLogout = () => {
     localStorage.clear()

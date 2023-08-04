@@ -3,9 +3,9 @@ import moment from 'moment'
 import { DeleteTransaction } from './delete-transaction'
 
 describe('delete-transaction', () => {
-  it('should not be able to delete transaction before due date time', () => {
+  it('should not be able to delete transaction before due date', () => {
     const deletedTransaction = DeleteTransaction({
-      dueDateTime: moment().add(10, 'days').format('YYYY-MM-DD')
+      dueDate: moment().add(10, 'days').format('YYYY-MM-DD')
     })
 
     expect(deletedTransaction).toContain({
@@ -13,9 +13,9 @@ describe('delete-transaction', () => {
     })
   })
 
-  it('should be able to delete transaction after due date time', () => {
+  it('should be able to delete transaction after due date', () => {
     const deletedTransaction = DeleteTransaction({
-      dueDateTime: moment().subtract(10, 'days').format('YYYY-MM-DD')
+      dueDate: moment().subtract(10, 'days').format('YYYY-MM-DD')
     })
 
     expect(deletedTransaction).toContain({

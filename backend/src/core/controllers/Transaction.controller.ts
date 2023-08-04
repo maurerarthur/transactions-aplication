@@ -47,9 +47,9 @@ export const TransactionViewAll = (req: Request, res: Response) => {
 
 export const TransactionCreate = (req: Request, res: Response) => {
   const { clientId } = req.params
-  const { amount, type, dueDateTime } = req.body
+  const { amount, type, dueDate } = req.body
 
-  const transaction = UpsertTransaction({ amount, type, clientId, dueDateTime })
+  const transaction = UpsertTransaction({ amount, type, clientId, dueDate })
 
   if (transaction.error) {
     return res.status(400).send(transaction)
@@ -81,9 +81,9 @@ export const TransactionCreate = (req: Request, res: Response) => {
 
 export const TransactionUpdate = async (req: Request, res: Response) => {
   const { id, clientId } = req.params
-  const { amount, type, dueDateTime } = req.body
+  const { amount, type, dueDate } = req.body
 
-  const transaction = UpsertTransaction({ amount, type, clientId, dueDateTime })
+  const transaction = UpsertTransaction({ amount, type, clientId, dueDate })
 
   if (transaction.error) {
     return res.status(400).send(transaction)
@@ -119,7 +119,7 @@ export const TransactionDelete = async (req: Request, res: Response) => {
       })
 
       const transaction = toBeRemovedTransaction
-        ? DeleteTransaction({ dueDateTime: toBeRemovedTransaction!.dueDateTime })
+        ? DeleteTransaction({ dueDate: toBeRemovedTransaction!.dueDate })
         : {}
 
       if (transaction?.error) {
