@@ -164,7 +164,7 @@ export const TransactionResume = (req: Request, res: Response) => {
 
       return res.status(200).send(resumeList)
     } catch (error) {
-      console.log(error)
+      throw error
     }
   }
 
