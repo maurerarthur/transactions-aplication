@@ -149,3 +149,24 @@ export const TransactionDelete = async (req: Request, res: Response) => {
 
   remove().finally(async () => await prisma.$disconnect())
 }
+
+export const TransactionResume = (req: Request, res: Response) => {
+  const { clientId } = req.params
+
+  const resume = async () => {
+    try {
+      const resumeList = await prisma.transaction.findMany({
+        where: {
+          clientId
+        },
+        take: 10
+      })
+
+      return res.status(200).send(resumeList)
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+  resume().finally(async () => await prisma.$disconnect())
+}

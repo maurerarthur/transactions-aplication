@@ -1,6 +1,6 @@
 import { api } from '../../../services/api'
 
-interface Transaction {
+export interface Transaction {
   id: string
   amount: number
   type: 'received' | 'sent'
