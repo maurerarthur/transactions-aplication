@@ -1,4 +1,5 @@
 import { FormEvent, useState } from 'react'
+
 import { toast } from 'react-toastify'
 import { useMutation } from '@tanstack/react-query'
 import { AxiosError } from 'axios'
@@ -6,25 +7,33 @@ import { Check, X } from 'lucide-react'
 import { useLoginStore } from '../Login/store'
 import { updateUser, deleteUser } from './services'
 
+import { useForm } from 'react-hook-form'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { z } from 'zod'
+
 import Input from '../../components/Input'
 import Button from '../../components/Button'
 
-export interface IUserForm {
-  name: string
-  email: string
-  password: string
-}
+const userFormSchema = z.object({
+  name: z.string(),
+  email: z.string(),
+  password: z.string()
+})
+
+export type IUserForm = z.infer<typeof userFormSchema>
 
 const User: React.FC = () => {
   const { id, name, email, setLogin } = useLoginStore()
 
-  const [isDeleteAccountConfirm, setIsDeleteAccountConfirm] = useState<boolean>(false)
-
-  const [userForm, setUserForm] = useState<IUserForm>({
-    name,
-    email,
-    password: ''
+  const { register, handleSubmit } = useForm<IUserForm>({
+    resolver: zodResolver(userFormSchema),
+    defaultValues: {
+      name: name ?? '',
+      email: email ?? ''
+    }
   })
+
+  const [isDeleteAccountConfirm, setIsDeleteAccountConfirm] = useState<boolean>(false)
 
   const editUser = useMutation(updateUser, {
     onSuccess: data => {
@@ -48,9 +57,8 @@ const User: React.FC = () => {
     }
   })
 
-  const submitUpdate = (event: FormEvent) => {
-    event.preventDefault()
-    editUser.mutate({ clientId: id, params: userForm })
+  const submitUpdate = (data: IUserForm) => {
+    return editUser.mutate({ clientId: id, params: data })
   }
 
   const submitRemove = (event: FormEvent) => {
@@ -63,28 +71,29 @@ const User: React.FC = () => {
       <h1 className='text-white text-4xl font-bold'>Edit user settings</h1>
       <form
         className='mt-5'
-        onSubmit={isDeleteAccountConfirm ? submitRemove : submitUpdate}
+        onSubmit={
+          isDeleteAccountConfirm
+            ? submitRemove
+            : handleSubmit(submitUpdate)
+        }
       >
         <Input
           label={<span className='text-white'>Name</span>}
           id='edit-user-name'
           type='text'
-          value={userForm.name}
-          onChange={event => setUserForm({ ...userForm, name: event.target.value })}
+          hook={{...register('name')}}
         />
         <Input
           label={<span className='text-white'>Email</span>}
           id='edit-user-email'
           type='text'
-          value={userForm.email}
-          onChange={event => setUserForm({ ...userForm, email: event.target.value })}
+          hook={{...register('email')}}
         />
         <Input
           label={<span className='text-white'>Type your new password</span>}
           id='edit-user-password'
           type='password'
-          value={userForm.password}
-          onChange={event => setUserForm({ ...userForm, password: event.target.value })}
+          hook={{...register('password')}}
         />
         <div className='mt-5'>
           <Button

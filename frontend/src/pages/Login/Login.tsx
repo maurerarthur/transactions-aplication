@@ -1,9 +1,11 @@
-import { useState, useEffect, FormEvent } from 'react'
-
+import { useEffect } from 'react'
 import { AxiosError } from 'axios'
 import { useMutation } from '@tanstack/react-query'
 import { useNavigate, Link } from 'react-router-dom'
 import { toast } from 'react-toastify'
+import { useForm } from 'react-hook-form'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { z } from 'zod'
 
 import Input from '../../components/Input'
 import Button from '../../components/Button'
@@ -15,20 +17,21 @@ import { DASHBOARD, SIGNUP } from '../../router/routes'
 
 import { version } from '../../../package.json'
 
-export interface signin {
-  email: string
-  password: string
-}
+const signinSchema = z.object({
+  email: z.string(),
+  password: z.string()
+})
+
+export type signin = z.infer<typeof signinSchema>
 
 const Login: React.FC = () => {
   const navigate = useNavigate()
 
-  const { setLogin, token } = useLoginStore()
-
-  const [signinForm, setSigninForm] = useState<signin>({
-    email: '',
-    password: ''
+  const { register, handleSubmit } = useForm<signin>({
+    resolver: zodResolver(signinSchema)
   })
+
+  const { setLogin, token } = useLoginStore()
 
   useEffect(() => {
     if(token) {
@@ -47,9 +50,8 @@ const Login: React.FC = () => {
     }
   })
 
-  const submit = (event: FormEvent, data: signin) => {
-    event.preventDefault()
-    signin.mutate(data)
+  const handleLoginSubmit = (data: signin) => {
+    return signin.mutate(data)
   }
 
   return(
@@ -58,7 +60,7 @@ const Login: React.FC = () => {
         <h1 className='text-slate-950 text-5xl font-bold'>Welcome</h1>
         <p className='text-gray-600 text-lg'>Please enter your details</p>
         <form
-          onSubmit={event => submit(event, signinForm)}
+          onSubmit={handleSubmit(handleLoginSubmit)}
           className='flex flex-col mt-5'
         >
           <div>
@@ -67,8 +69,7 @@ const Login: React.FC = () => {
               type='text'
               placeholder='Email'
               label='Enter your email'
-              value={signinForm.email}
-              onChange={event => setSigninForm({ ...signinForm, email: event.target.value })}
+              hook={{...register('email')}}
             />
           </div>
           <div className='mt-5'>
@@ -77,8 +78,7 @@ const Login: React.FC = () => {
               type='password'
               placeholder='Password'
               label='Enter your password'
-              value={signinForm.password}
-              onChange={event => setSigninForm({ ...signinForm, password: event.target.value })}
+              hook={{...register('password')}}
             />
           </div>
           <div className='mt-5'>

@@ -10,7 +10,8 @@ interface InputProps {
   value?: any
   error?: boolean
   helperText?: string
-  onChange: (event: React.ChangeEvent<HTMLInputElement>) => void
+  onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void
+  hook?: object
 }
 
 const Input: React.FC<InputProps> = props => {
@@ -43,6 +44,7 @@ const Input: React.FC<InputProps> = props => {
           type={type}
           value={props.value}
           onChange={props.onChange}
+          {...props.hook}
         />
         {(props.type == 'password' && !isPasswordVisible) && (
           <button
