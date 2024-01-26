@@ -1,7 +1,8 @@
 import { Request, Response, NextFunction } from 'express'
 import { verify } from 'jsonwebtoken'
+import { env } from '../env'
 
-export const Auth = async (req: Request, res: Response, next: NextFunction) => {
+export const Auth = (req: Request, res: Response, next: NextFunction) => {
   const token = req.headers.authorization
   const { clientId } = req.params
 
@@ -13,7 +14,7 @@ export const Auth = async (req: Request, res: Response, next: NextFunction) => {
   }
 
   try {
-    const decoded: any = verify(token, process.env.JWT_SECRET!.toString())
+    const decoded: any = verify(token, env.JWT_SECRET)
 
     if(clientId !== decoded.id) {
       return res.status(401).send({
