@@ -46,7 +46,7 @@ describe('create-transaction', () => {
 
   it('should not allow to create transaction with type different than sent or received', () => {
     const transaction = UpsertTransaction({
-      //@ts-ignore
+      // @ts-ignore
       type: '',
       amount: 0,
       clientId: '1',

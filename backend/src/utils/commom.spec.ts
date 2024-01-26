@@ -1,5 +1,4 @@
 import { describe, it, expect } from 'vitest'
-
 import { removeObjectAttributes } from './common'
 
 describe('removeObjectAttributes', () => {
@@ -14,10 +13,7 @@ describe('removeObjectAttributes', () => {
   })
 
   it('should remove 2 attributes from object', () => {
-    const obj = removeObjectAttributes({ name: '...', age: 10, email: '...@gmail.com' }, [
-      'age',
-      'email'
-    ])
+    const obj = removeObjectAttributes({ name: '...', age: 10, email: '...@gmail.com' }, ['age', 'email'])
     expect(obj).not.toContain({ age: 10, email: '...@gmail.com' })
   })
 })

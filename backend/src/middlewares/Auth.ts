@@ -5,7 +5,7 @@ export const Auth = async (req: Request, res: Response, next: NextFunction) => {
   const token = req.headers.authorization
   const { clientId } = req.params
 
-  if (!token) {
+  if(!token) {
     return res.status(401).send({
       error: true,
       message: 'A token was not found in the request header.'
@@ -15,14 +15,14 @@ export const Auth = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const decoded: any = verify(token, process.env.JWT_SECRET!.toString())
 
-    if (clientId !== decoded.id) {
+    if(clientId !== decoded.id) {
       return res.status(401).send({
         error: true,
         message: 'Error on authentication.'
       })
     }
 
-    if (decoded) {
+    if(decoded) {
       return next()
     }
 

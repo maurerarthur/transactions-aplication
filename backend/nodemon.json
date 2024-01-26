@@ -1,6 +1,0 @@
-{
-  "events": {
-    "start": "npx prettier --write .",
-    "restart": "npx prettier --write ."
-  }
-}

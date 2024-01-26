@@ -1,5 +1,5 @@
 export const validateEmail = (email: string): boolean => {
-  if (!email) {
+  if(!email) {
     return true
   }
 

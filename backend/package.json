@@ -3,14 +3,13 @@
     "start": "node dist/app.js",
     "dev": "nodemon src/app.ts",
     "build": "tsc -p .",
-    "test": "npx prettier --write . && vitest",
-    "coverage": "npx prettier --write . && vitest run --coverage"
+    "test": "vitest",
+    "coverage": "vitest run --coverage"
   },
   "devDependencies": {
     "@types/cors": "^2.8.13",
     "@types/node": "^20.1.0",
     "nodemon": "^2.0.22",
-    "prettier": "2.8.8",
     "prisma": "^4.13.0",
     "ts-node": "^10.9.1",
     "typescript": "^5.0.4",

@@ -17,7 +17,7 @@ export const TransactionView = (req: Request, res: Response) => {
       })
 
       return res.status(200).send(transaction)
-    } catch (error) {
+    } catch(error) {
       throw error
     }
   }
@@ -37,7 +37,7 @@ export const TransactionViewAll = (req: Request, res: Response) => {
       })
 
       return res.status(200).send(transactions)
-    } catch (error) {
+    } catch(error) {
       throw error
     }
   }
@@ -51,7 +51,7 @@ export const TransactionCreate = (req: Request, res: Response) => {
 
   const transaction = UpsertTransaction({ amount, type, clientId, dueDate })
 
-  if (transaction.error) {
+  if(transaction.error) {
     return res.status(400).send(transaction)
   }
 
@@ -62,9 +62,9 @@ export const TransactionCreate = (req: Request, res: Response) => {
       })
 
       res.status(201).send(createdTransaction)
-    } catch (error) {
-      if (error instanceof Prisma.PrismaClientKnownRequestError) {
-        if (error.code === 'P2003') {
+    } catch(error) {
+      if(error instanceof Prisma.PrismaClientKnownRequestError) {
+        if(error.code === 'P2003') {
           return res.status(409).send({
             error: true,
             message: 'A client ID is required in order to create a transaction.'
@@ -85,7 +85,7 @@ export const TransactionUpdate = async (req: Request, res: Response) => {
 
   const transaction = UpsertTransaction({ amount, type, clientId, dueDate })
 
-  if (transaction.error) {
+  if(transaction.error) {
     return res.status(400).send(transaction)
   }
 
@@ -99,7 +99,7 @@ export const TransactionUpdate = async (req: Request, res: Response) => {
       })
 
       return res.status(200).send(updatedTransaction)
-    } catch (error) {
+    } catch(error) {
       throw error
     }
   }
@@ -122,7 +122,7 @@ export const TransactionDelete = async (req: Request, res: Response) => {
         ? DeleteTransaction({ dueDate: toBeRemovedTransaction!.dueDate })
         : {}
 
-      if (transaction?.error) {
+      if(transaction?.error) {
         return res.status(400).send(transaction)
       }
 
@@ -136,9 +136,9 @@ export const TransactionDelete = async (req: Request, res: Response) => {
         error: false,
         message: `Transaction with ID ${id} deleted.`
       })
-    } catch (error) {
-      if (error instanceof Prisma.PrismaClientKnownRequestError) {
-        if (error.code === 'P2025') {
+    } catch(error) {
+      if(error instanceof Prisma.PrismaClientKnownRequestError) {
+        if(error.code === 'P2025') {
           return res.status(404).send({ error: true, message: 'Transaction not found.' })
         }
 
@@ -163,7 +163,7 @@ export const TransactionResume = (req: Request, res: Response) => {
       })
 
       return res.status(200).send(resumeList)
-    } catch (error) {
+    } catch(error) {
       throw error
     }
   }

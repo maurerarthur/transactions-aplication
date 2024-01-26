@@ -7,21 +7,21 @@ export const UpsertClient = async (
 ): Promise<Client | { error: boolean; message: string } | any> => {
   const { email, name, password } = client
 
-  if (password?.length < 8 || !password) {
+  if(password?.length < 8 || !password) {
     return {
       error: true,
       message: 'The password needs to be at least 8 characters long.'
     }
   }
 
-  if (password?.includes(name)) {
+  if(password?.includes(name)) {
     return {
       error: true,
       message: 'Your name cannot be a part of the password.'
     }
   }
 
-  if (!validateEmail(email)) {
+  if(!validateEmail(email)) {
     return {
       error: true,
       message: 'The email format is wrong.'

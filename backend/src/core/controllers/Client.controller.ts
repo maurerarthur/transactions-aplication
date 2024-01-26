@@ -12,7 +12,7 @@ export const ClientSignup = async (req: Request, res: Response) => {
 
   const client = await UpsertClient({ name, email, password })
 
-  if (client.error) {
+  if(client.error) {
     return res.status(400).send(client)
   }
 
@@ -25,9 +25,9 @@ export const ClientSignup = async (req: Request, res: Response) => {
       const createdClientWithoutPassword = removeObjectAttributes(createdClient, ['password'])
 
       return res.status(201).send(createdClientWithoutPassword)
-    } catch (error) {
-      if (error instanceof Prisma.PrismaClientKnownRequestError) {
-        if (error.code === 'P2002') {
+    } catch(error) {
+      if(error instanceof Prisma.PrismaClientKnownRequestError) {
+        if(error.code === 'P2002') {
           return res.status(409).send({ error: true, message: 'The email already exists.' })
         }
 
@@ -50,7 +50,7 @@ export const ClientSignin = (req: Request, res: Response) => {
         }
       })
 
-      if (!client) {
+      if(!client) {
         return res.status(404).send({
           error: true,
           message: 'Client not found.'
@@ -67,7 +67,7 @@ export const ClientSignin = (req: Request, res: Response) => {
         expiresIn: process.env.JWT_EXPIRY!.toString()
       })
 
-      if (await compare(password, client?.password)) {
+      if(await compare(password, client?.password)) {
         return res.status(200).send({
           ...clientData,
           token
@@ -78,7 +78,7 @@ export const ClientSignin = (req: Request, res: Response) => {
         error: true,
         message: 'Wrong email or password.'
       })
-    } catch (error) {
+    } catch(error) {
       throw error
     }
   }
@@ -100,7 +100,7 @@ export const ClientView = (req: Request, res: Response) => {
       const clientWithoutPassword = removeObjectAttributes(client, ['password'])
 
       return res.status(200).send(clientWithoutPassword)
-    } catch (error) {
+    } catch(error) {
       throw error
     }
   }
@@ -114,7 +114,7 @@ export const ClientUpdate = async (req: Request, res: Response) => {
 
   const client = await UpsertClient({ name, email, password })
 
-  if (client.error) {
+  if(client.error) {
     return res.status(400).send(client)
   }
 
@@ -130,7 +130,7 @@ export const ClientUpdate = async (req: Request, res: Response) => {
       const updatedClientWithoutPassword = removeObjectAttributes(updatedClient, ['password'])
 
       return res.status(200).send(updatedClientWithoutPassword)
-    } catch (error) {
+    } catch(error) {
       throw error
     }
   }
@@ -150,9 +150,9 @@ export const ClientDelete = async (req: Request, res: Response) => {
       })
 
       return res.status(200).send({ error: false, message: `Client with ID ${clientId} deleted.` })
-    } catch (error) {
-      if (error instanceof Prisma.PrismaClientKnownRequestError) {
-        if (error.code === 'P2025') {
+    } catch(error) {
+      if(error instanceof Prisma.PrismaClientKnownRequestError) {
+        if(error.code === 'P2025') {
           return res.status(404).send({ error: true, message: 'Client not found.' })
         }
 

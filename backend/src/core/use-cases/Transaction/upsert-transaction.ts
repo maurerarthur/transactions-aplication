@@ -8,21 +8,21 @@ export const UpsertTransaction = (
 
   const validTransactionTypes = ['sent', 'received']
 
-  if (amount <= 0) {
+  if(amount <= 0) {
     return {
       error: true,
       message: 'The amount should be higher than zero.'
     }
   }
 
-  if (!type || !validTransactionTypes.includes(type)) {
+  if(!type || !validTransactionTypes.includes(type)) {
     return {
       error: true,
       message: 'The type of the transaction should be sent or received.'
     }
   }
 
-  if (!moment(dueDate, 'YYYY-MM-DD', true).isValid()) {
+  if(!moment(dueDate, 'YYYY-MM-DD', true).isValid()) {
     return {
       error: true,
       message: 'The due date should be in year-month-day (yyyy-mm-dd) format.'

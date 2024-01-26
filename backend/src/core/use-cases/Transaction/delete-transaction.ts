@@ -6,7 +6,7 @@ export const DeleteTransaction = (
 ): Transaction | { error: boolean; message: string } | any => {
   const { dueDate } = transaction
 
-  if (moment(moment.now()).isBefore(dueDate)) {
+  if(moment(moment.now()).isBefore(dueDate)) {
     return {
       error: true,
       message: 'The transaction cannot be deleted before due date.'
