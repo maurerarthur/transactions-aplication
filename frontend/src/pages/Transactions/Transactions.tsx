@@ -2,6 +2,9 @@ import { useState } from 'react'
 import { useQuery, useMutation } from '@tanstack/react-query'
 import { AxiosError } from 'axios'
 import { toast } from 'react-toastify'
+import { useForm } from 'react-hook-form'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { z } from 'zod'
 
 import { Eye, Pen, Trash } from 'lucide-react'
 import Input from '../../components/Input'
@@ -23,19 +26,23 @@ export interface ITransactionForm {
   dueDate: string
 }
 
+const transactionSchema = z.object({
+  amount: z.string(),
+  type: z.string(),
+  dueDate: z.string()
+})
+
+export type transaction = z.infer<typeof transactionSchema>
+
 const Transactions: React.FC = () => {
   const { id } = useLoginStore()
 
   const [openedTransactionId, setOpenedTransactionId] = useState<string>('')
   const [editingTransactionId, setEditingTransactionId] = useState<string>('')
 
-  const [transactionForm, setTransactionForm] = useState<ITransactionForm>({
-    amount: 0,
-    type: 'sent',
-    dueDate: ''
+  const { register, handleSubmit, reset, setValue } = useForm<transaction>({
+    resolver: zodResolver(transactionSchema)
   })
-
-  const [newTransactionForm, setNewTransactionForm] = useState<ITransactionForm>({ ...transactionForm })
 
   const transactions = useQuery({
     retry: false,
@@ -47,11 +54,8 @@ const Transactions: React.FC = () => {
   const createTransaction = useMutation(addTransaction, {
     onSuccess: () => {
       transactions.refetch()
-      setNewTransactionForm({
-        amount: 0,
-        type: 'sent',
-        dueDate: ''
-      })
+      reset()
+      return toast.success('Transaction successfully created.')
     },
     onError: (error: AxiosError<any>) => {
       const { message } = error.response?.data
@@ -60,7 +64,12 @@ const Transactions: React.FC = () => {
   })
 
   const updateTransaction = useMutation(editTransaction, {
-    onSuccess: () => transactions.refetch(),
+    onSuccess: () => {
+      transactions.refetch()
+      setEditingTransactionId('')
+      reset()
+      return toast.success('Transaction successfully edited.')
+    },
     onError: (error: AxiosError<any>) => {
       const { message } = error.response?.data
       return toast.error(message)      
@@ -78,18 +87,28 @@ const Transactions: React.FC = () => {
     }
   })
 
+  const handleCreateTransaction = (data: transaction) => {
+    return createTransaction.mutate({ clientId: id, data })
+  }
+
+  const handleUpdateTransaction = (data: transaction) => {
+    return updateTransaction.mutate({ clientId: id, transactionId: editingTransactionId, data })
+  }
+
   return(
     <div className='p-2'>
       <h1 className='text-white text-4xl font-bold'>Transactions</h1>
       <div className='mt-5'>
-        <div className='flex flex-col gap-3'>
+        <form
+          className='flex flex-col gap-3'
+          onSubmit={handleSubmit(handleCreateTransaction)}
+        >
           <div className='flex flex-row'>
             <Input
               id='edit-amount'
               type='number'
               placeholder='Amount'
-              value={newTransactionForm.amount}
-              onChange={event => setNewTransactionForm({ ...newTransactionForm, amount: +event.target.value })}
+              hook={{...register('amount')}}
             />
             <Select
               id='edit-type'
@@ -97,27 +116,24 @@ const Transactions: React.FC = () => {
                 { value: 'sent', label: 'Sent' },
                 { value: 'received', label: 'Received' }
               ]}
-              value={newTransactionForm.type}
-              onChange={event => setNewTransactionForm({ ...newTransactionForm, type: event.target.value })}
+              hook={{...register('type')}}
             />
             <Input
               id='edit-due-date'
               type='date'
               placeholder='Due date'
-              value={newTransactionForm.dueDate}
-              onChange={event => setNewTransactionForm({ ...newTransactionForm, dueDate: event.target.value })}
+              hook={{...register('dueDate')}}
             />
           </div>
           <div className='w-100 md:w-1/3'>
             <Button
               id='edit-submit'
-              type='button'
+              type='submit'
               title='Create new transaction'
               isLoading={false}
-              onClick={() => createTransaction.mutate({ clientId: id, data: newTransactionForm })}
             />
           </div>
-        </div>
+        </form>
       </div>
       <div className='mt-5'>
         {transactions.data && transactions.data?.length > 0 ? (
@@ -138,7 +154,7 @@ const Transactions: React.FC = () => {
             </div>
             <div className='flex flex-col gap-2'>
               {transactions.data?.map(transaction => (
-                <>
+                <div key={transaction.id}>
                   <div className='flex flex-row justify-between bg-white rounded-md p-1'>
                     <div className='w-1/4 flex flex-row justify-start'>
                       <p>$ {transaction.amount}</p>
@@ -165,11 +181,14 @@ const Transactions: React.FC = () => {
                       <button
                         type='button'
                         onClick={() => {
+                          setValue('amount', transaction.amount?.toString())
+                          setValue('type', transaction.type)
+                          setValue('dueDate', transaction.dueDate)
+
                           if(editingTransactionId === transaction.id) {
                             return setEditingTransactionId('')
                           }
 
-                          setTransactionForm({ amount: transaction.amount, type: transaction.type, dueDate: transaction.dueDate })
                           setEditingTransactionId(transaction.id)
                         }}
                       >
@@ -184,15 +203,17 @@ const Transactions: React.FC = () => {
                     </div>
                   </div>
                   {(editingTransactionId === transaction.id) && (
-                    <div className='flex flex-col gap-y-3 bg-white rounded-md p-2'>
+                    <form
+                      className='flex flex-col gap-y-3 bg-white rounded-md p-2'
+                      onSubmit={handleSubmit(handleUpdateTransaction)}
+                    >
                       <div className='flex flex-row justify-between w-100 md:w-1/3'>
                         <p className='mr-3'>Amount:</p>
                         <Input
                           id='edit-amount'
                           type='number'
                           placeholder='Amount'
-                          value={transactionForm.amount}
-                          onChange={event => setTransactionForm({ ...transactionForm, amount: +event.target.value })}
+                          hook={{...register('amount')}}
                         />
                       </div>
                       <div className='flex flex-row justify-between w-100 md:w-1/3'>
@@ -203,8 +224,7 @@ const Transactions: React.FC = () => {
                             { value: 'sent', label: 'Sent' },
                             { value: 'received', label: 'Received' }
                           ]}
-                          value={transactionForm.type}
-                          onChange={event => setTransactionForm({ ...transactionForm, type: event.target.value })}
+                          hook={{...register('type')}}
                         />
                       </div>
                       <div className='flex flex-row justify-between w-100 md:w-1/3'>
@@ -213,20 +233,18 @@ const Transactions: React.FC = () => {
                           id='edit-due-date'
                           type='date'
                           placeholder='Due date'
-                          value={transactionForm.dueDate}
-                          onChange={event => setTransactionForm({ ...transactionForm, dueDate: event.target.value })}
+                          hook={{...register('dueDate')}}
                         />
                       </div>
                       <div className='flex flex-row justify-between w-100 md:w-1/3'>
                         <Button
                           id='edit-submit'
-                          type='button'
+                          type='submit'
                           title='Save'
                           isLoading={false}
-                          onClick={() => updateTransaction.mutate({ clientId: id, transactionId: transaction.id, data: transactionForm })}
                         />
                       </div>
-                    </div>
+                    </form>
                   )}
                   {(openedTransactionId === transaction.id) && (
                     <div className='flex flex-col bg-white rounded-md p-1'>
@@ -244,7 +262,7 @@ const Transactions: React.FC = () => {
                       </div>
                     </div>
                   )}
-                </>
+                </div>
               ))}
             </div>
           </div>

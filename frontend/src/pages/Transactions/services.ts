@@ -2,7 +2,7 @@ import { api } from '../../../services/api'
 
 export interface Transaction {
   id: string
-  amount: number
+  amount: string
   type: 'received' | 'sent'
   clientId: string
   dueDate: string
@@ -21,7 +21,7 @@ export const addTransaction = async({
 }: {
   clientId: string
   data: {
-    amount: number
+    amount: string
     type: string
     dueDate: string
   }
@@ -38,7 +38,7 @@ export const editTransaction = async({
   clientId: string
   transactionId: string
   data: {
-    amount: number
+    amount: string
     type: string
     dueDate: string
   }

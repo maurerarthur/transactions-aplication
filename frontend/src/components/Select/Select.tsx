@@ -2,8 +2,9 @@ interface SelectProps {
   name?: string
   id: string
   options: { value: string, label: string }[]
-  value: string
-  onChange: (event: React.ChangeEvent<HTMLSelectElement>) => void
+  value?: string
+  onChange?: (event: React.ChangeEvent<HTMLSelectElement>) => void
+  hook?: object
 }
 
 const Select: React.FC<SelectProps> = props => {
@@ -14,9 +15,13 @@ const Select: React.FC<SelectProps> = props => {
       name={props.name}
       value={props.value}
       onChange={props.onChange}
+      {...props.hook}
     >
       {props.options.map(option => (
-        <option value={option.value}>
+        <option
+          value={option.value}
+          key={option.label}
+        >
           {option.label}
         </option>
       ))}
