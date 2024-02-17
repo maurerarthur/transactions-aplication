@@ -1,19 +1,19 @@
-import { useQuery } from '@tanstack/react-query'
+// import { useQuery } from '@tanstack/react-query'
 // import { LineChart } from 'react-chartkick'
 // import 'chartkick/chart.js'
 
-import { useLoginStore } from '../Login/store'
-import { fetchTransactionsResume } from './services'
+// import { useLoginStore } from '../Login/store'
+// import { fetchTransactionsResume } from './services'
 
 const Dashboard: React.FC = () => {
-  const { id } = useLoginStore()
+  // const { id } = useLoginStore()
 
-  const transactionsResume = useQuery({
-    retry: false,
-    refetchOnMount: true,
-    queryKey: ['transactionsResume'],
-    queryFn: () => fetchTransactionsResume(id)
-  })
+  // const transactionsResume = useQuery({
+  //   retry: false,
+  //   refetchOnMount: true,
+  //   queryKey: ['transactionsResume'],
+  //   queryFn: () => fetchTransactionsResume(id)
+  // })
 
   // const resume = transactionsResume.data?.reduce((a, transaction) => ({
   //   ...a, [transaction.dueDate]: transaction.type == 'received' ? +transaction.amount : -Math.abs(transaction.amount)
